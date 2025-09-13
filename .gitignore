@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 # Environment variables (contains sensitive credentials)
 .env
 
+=======
+>>>>>>> 531decd15bb9ec6cbb9e2f1a6dcf87dea1f56e9c
 # Python
 __pycache__/
 *.py[cod]
@@ -19,22 +22,37 @@ parts/
 sdist/
 var/
 wheels/
+<<<<<<< HEAD
+=======
+pip-wheel-metadata/
+share/python-wheels/
+>>>>>>> 531decd15bb9ec6cbb9e2f1a6dcf87dea1f56e9c
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
 
+<<<<<<< HEAD
 # Virtual environments
 venv/
 .venv/
 env/
 ENV/
+=======
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+>>>>>>> 531decd15bb9ec6cbb9e2f1a6dcf87dea1f56e9c
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+<<<<<<< HEAD
 
 # OS
 .DS_Store
@@ -42,3 +60,49 @@ Thumbs.db
 
 # Logs
 *.log
+=======
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project Specific
+# Debug HTML files
+debug_*.html
+debug_*.htm
+page_analysis.html
+
+# CSV output files (keep sample but ignore timestamped ones)
+tiktok_hashtags_*.csv
+enhanced_tiktok_hashtags_*.csv
+!sample_output.csv
+
+# Screenshots
+debug_screenshot.png
+*.png
+*.jpg
+*.jpeg
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Environment variables
+.env
+.env.local
+
+# Supabase credentials (if stored in separate file)
+supabase_config.py
+
+# Chrome driver downloads
+chromedriver*
+>>>>>>> 531decd15bb9ec6cbb9e2f1a6dcf87dea1f56e9c
