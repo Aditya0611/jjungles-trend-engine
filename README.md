@@ -1,207 +1,209 @@
-# Jjungles Trend Engine
+# Instagram Hashtag Analyzer
 
-A comprehensive social media trend analysis toolkit featuring both Twitter and TikTok hashtag scrapers with advanced analytics and database integration.
+A comprehensive Instagram hashtag analysis tool that extracts post metrics, engagement scores, sentiment analysis, and post content for specific hashtags.
 
-## 🚀 Projects Overview
+## Features
 
-This repository contains two powerful scraping tools:
+✅ **Post Count**: Get total number of posts for each hashtag  
+✅ **Engagement Metrics**: Extract likes and comments for engagement scoring  
+✅ **Post Links**: Collect direct URLs to analyzed posts  
+✅ **Sentiment Analysis**: Analyze post content sentiment using TextBlob  
+✅ **Post Content**: Extract captions and text content from posts  
+✅ **Database Storage**: Save all data to Supabase for persistence  
+✅ **Comprehensive Reporting**: Generate detailed analysis summaries  
 
-### 1. Twitter Trending Hashtags Scraper
-A Python-based web scraper that extracts trending hashtags from trends24.in (India) and stores them in Supabase with sentiment analysis and engagement scoring.
+## What the Tool Extracts
 
-### 2. TikTok Hashtag Scraper V4
-A powerful Python-based web scraper that extracts trending hashtags from TikTok's Creative Center with advanced features including engagement scoring, sentiment analysis, and automatic Supabase database integration.
+For each hashtag, the analyzer provides:
 
----
+- **Total Post Count**: Number of posts using the hashtag
+- **Individual Post Data**:
+  - Post URL/Link
+  - Like count
+  - Comment count
+  - Engagement score (likes + comments)
+  - Post content/caption
+  - Sentiment analysis (positive/negative/neutral with polarity scores)
+- **Aggregate Metrics**:
+  - Total engagement across all analyzed posts
+  - Average engagement per post
+  - Overall sentiment distribution
+  - Top performing posts
 
-## 📱 Twitter Scraper Features
+## Installation
 
-- 🔥 Scrapes trending hashtags from trends24.in for India
-- 📊 Calculates engagement scores (1-10 scale) for each hashtag
-- 😊 Performs sentiment analysis (Positive/Negative/Neutral)
-- 🔗 Generates Twitter and Instagram search links
-- 💾 Stores data in Supabase database
-- 🧹 Fresh data insertion (clears old data before inserting new)
-- 🎯 Filters for Indian-relevant content
+1. **Clone or download the files**
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Install ChromeDriver**: Make sure you have Chrome browser and ChromeDriver installed
+4. **Download TextBlob corpora** (first time only):
+   ```python
+   import nltk
+   nltk.download('punkt')
+   nltk.download('brown')
+   ```
 
-## � TikTok Scraper Features
+## Configuration
 
-### Core Functionality
-- **Multi-URL Strategy**: Scrapes from multiple TikTok Creative Center regions (US, GB, IN, SG)
-- **Smart "View More" Detection**: Automatically finds and clicks pagination buttons to load additional content
-- **Comprehensive Data Extraction**: Extracts hashtag names, post counts, rankings, and categories
-- **Duplicate Prevention**: Automatically removes duplicate hashtags
-
-### Advanced Analytics
-- **Engagement Score Calculation**: 1-10 scale scoring based on post volume, category popularity, and trending keywords
-- **Sentiment Analysis**: Uses TextBlob library for sentiment classification
-- **Smart Categorization**: Automatically categorizes hashtags into 12 major categories
-
----
-
-## 📋 Requirements
-
-### Common Dependencies
-- Python 3.7+
-- Internet connection for web scraping
-
-### Twitter Scraper Dependencies
-```
-requests>=2.31.0
-beautifulsoup4>=4.12.0
-python-dotenv>=1.0.0
-supabase>=1.0.0
-textblob>=0.17.0
-```
-
-### TikTok Scraper Dependencies
-```
-selenium>=4.0.0
-undetected-chromedriver>=3.5.0
-beautifulsoup4>=4.11.0
-pandas>=1.5.0
-requests>=2.28.0
-textblob>=0.17.0
-supabase>=1.0.0
+### 1. Instagram Credentials
+Update the credentials in `enhanced_hashtag_analyzer.py`:
+```python
+USERNAME = "your_instagram_username"
+PASSWORD = "your_instagram_password"
 ```
 
-## 🛠️ Installation
+### 2. Target Hashtags
+Modify the `TARGET_HASHTAGS` list with hashtags you want to analyze:
+```python
+TARGET_HASHTAGS = [
+    'trending',
+    'viral',
+    'fashion',
+    'food',
+    'travel',
+    # Add your hashtags here
+]
+```
 
-1. Clone this repository:
+### 3. Supabase Setup (Optional)
+If you want to store data in Supabase:
+- Create a Supabase project
+- Create a table called `hashtag_analysis` with these columns:
+  - `id` (int8, primary key)
+  - `hashtag` (text)
+  - `post_count` (int8)
+  - `total_engagement` (int8)
+  - `engagement_rate` (float8)
+  - `sentiment_polarity` (float8)
+  - `sentiment_subjectivity` (float8)
+  - `overall_sentiment` (text)
+  - `posts_analyzed` (int8)
+  - `posts_data` (jsonb)
+  - `created_at` (timestamptz)
+
+## Usage
+
+### Basic Usage
 ```bash
-git clone https://github.com/Aditya0611/jjungles-trend-engine.git
-cd jjungles-trend-engine
+python enhanced_hashtag_analyzer.py
 ```
 
-2. Install required packages:
-```bash
-pip install -r requirements.txt
+### Customizing Analysis
+You can modify these parameters in the script:
+- `max_posts_per_hashtag`: Number of posts to analyze per hashtag (default: 15)
+- `TARGET_HASHTAGS`: List of hashtags to analyze
+
+## Output
+
+The tool provides:
+
+### Console Output
+```
+📊 HASHTAG ANALYSIS SUMMARY
+================================================================================
+
+#TRENDING
+  📈 Total Posts: 1,234,567
+  💝 Total Engagement: 45,678
+  📊 Avg Engagement: 3,045
+  🎭 Overall Sentiment: Positive
+  📝 Posts Analyzed: 15
+  🔥 Top Post: 12,456 engagement
+     URL: https://instagram.com/p/ABC123/
 ```
 
-3. Set up environment variables:
-```bash
-cp .env.example .env
-```
-Edit `.env` file and add your Supabase credentials:
-```
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_KEY=your_supabase_anon_key
-```
+### Supabase Data
+All data is automatically saved to your Supabase database including:
+- Hashtag metrics
+- Individual post data (JSON format)
+- Sentiment scores
+- Timestamps
 
-## 🚀 Usage
+## Data Structure
 
-### Twitter Scraper
-```bash
-python t3_scraper.py
-```
-
-### TikTok Scraper
-```bash
-python base.py
-```
-
-## ⚙️ Configuration
-
-### Twitter Scraper Configuration
-Edit `config.txt` to customize scraper behavior:
+### Individual Post Data
 ```json
 {
-    "TWEET_MAX_CHARS": 280,
-    "HEADLESS_MODE": false,
-    "ENGLISH_ONLY_REGEX": false,
-    "SLEEP_TIME_PAGE_LOAD": 5,
-    "SLEEP_TIME_AFTER_COOKIE_CONSENT": 2,
-    "SLEEP_TIME_AFTER_TAB_CLICK": 3
+  "url": "https://instagram.com/p/ABC123/",
+  "likes": 1250,
+  "comments": 89,
+  "engagement_score": 1339,
+  "content": "Amazing sunset today! #trending #photography",
+  "sentiment": {
+    "polarity": 0.625,
+    "subjectivity": 0.6,
+    "sentiment": "positive"
+  }
 }
 ```
 
-### TikTok Scraper Configuration
-Modify the `config` dictionary in the `main()` function of `base.py`:
-```python
-config = {
-    'scrolls': 15,          # Number of scroll attempts
-    'delay': 3,             # Delay between scrolls (seconds)
-    'headless': False,      # Run browser in background
-    'output_file': None,    # Custom output filename
-    'debug': True           # Enable debug output
+### Hashtag Summary
+```json
+{
+  "hashtag": "trending",
+  "post_count": 1234567,
+  "total_engagement": 45678,
+  "engagement_rate": 3045.2,
+  "average_sentiment": {
+    "polarity": 0.234,
+    "subjectivity": 0.456,
+    "sentiment": "positive"
+  },
+  "posts": [/* array of individual posts */]
 }
 ```
 
-## 💾 Database Setup
+## Sentiment Analysis
 
-### Supabase Setup
-1. Create a Supabase project at [supabase.com](https://supabase.com)
-2. Update credentials in your `.env` file
+The tool uses TextBlob for sentiment analysis, providing:
+- **Polarity**: Range from -1 (negative) to 1 (positive)
+- **Subjectivity**: Range from 0 (objective) to 1 (subjective)
+- **Sentiment Label**: Categorized as positive, negative, or neutral
 
-### Twitter Scraper Table
-```sql
-CREATE TABLE "Twitter trending_Hashtags" (
-    id SERIAL PRIMARY KEY,
-    topic TEXT NOT NULL,
-    count TEXT,
-    engagement_score INTEGER,
-    sentiment TEXT,
-    twitter_link TEXT,
-    post_content TEXT,
-    created_at TIMESTAMP DEFAULT NOW()
-);
+## Rate Limiting & Best Practices
+
+The script includes built-in delays and human-like behavior:
+- Random pauses between requests (3-10 seconds)
+- Randomized user agent and browser settings
+- Graceful error handling
+- Automatic modal closing
+
+## Troubleshooting
+
+### Common Issues
+1. **Login Failed**: Check your Instagram credentials
+2. **ChromeDriver Error**: Ensure ChromeDriver is installed and in PATH
+3. **Element Not Found**: Instagram may have changed their layout - selectors might need updating
+4. **Rate Limited**: Reduce the number of hashtags or increase delays
+
+### Tips
+- Use a test Instagram account
+- Don't analyze too many hashtags at once
+- Monitor console output for errors
+- Check Supabase logs if database insertion fails
+
+## Legal & Ethical Considerations
+
+- Respect Instagram's Terms of Service
+- Use responsibly and don't overload their servers
+- Consider the privacy of users whose posts you're analyzing
+- This tool is for educational and research purposes
+
+## Files Structure
+
+```
+├── enhanced_hashtag_analyzer.py    # Main analysis script
+├── main.py                        # Original scraper (backup)
+├── requirements.txt               # Python dependencies
+└── README.md                     # This file
 ```
 
-### TikTok Scraper Table
-```sql
-CREATE TABLE tiktok_hashtags (
-    id SERIAL PRIMARY KEY,
-    rank INTEGER,
-    hashtag TEXT NOT NULL,
-    posts TEXT,
-    views TEXT,
-    category TEXT DEFAULT 'General',
-    engagement_score DECIMAL(3,1),
-    sentiment_polarity DECIMAL(4,3),
-    sentiment_label TEXT DEFAULT 'Neutral',
-    scraped_at TIMESTAMP DEFAULT NOW(),
-    original_text TEXT
-);
-```
+## Support
 
-## 📁 Project Structure
-
-```
-jjungles-trend-engine/
-├── t3_scraper.py          # Twitter scraper main script
-├── base.py               # TikTok scraper main script
-├── config_manager.py     # Twitter scraper configuration management
-├── config.txt           # Twitter scraper configuration settings
-├── requirements.txt     # Python dependencies for both scrapers
-├── .env.example        # Environment variables template
-├── .gitignore         # Git ignore patterns
-└── README.md          # This documentation
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is open source and available under the MIT License.
-
-## ⚠️ Disclaimer
-
-These scrapers are designed for research and educational purposes. Users are responsible for complying with platform terms of service and applicable laws.
-
-## 📝 Notes
-
-- Both scrapers respect website rate limits and include appropriate delays
-- Data is refreshed completely on each run for accuracy
-- Ensure your Supabase RLS policies allow insertions if enabled
-- For TikTok scraper: Please respect TikTok's terms of service and rate limits
-
----
-
-**Last Updated**: September 2025  
-**Compatibility**: Python 3.7+, Chrome Latest
+If you encounter issues:
+1. Check the console output for error messages
+2. Verify your Instagram credentials
+3. Ensure all dependencies are installed
+4. Check if Instagram has changed their page structure

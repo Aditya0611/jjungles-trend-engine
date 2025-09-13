@@ -106,3 +106,13 @@ supabase_config.py
 # Chrome driver downloads
 chromedriver*
 >>>>>>> 531decd15bb9ec6cbb9e2f1a6dcf87dea1f56e9c
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+config.py
+*.log
+main copy.py
+main copy 2.py
+vrnv/
