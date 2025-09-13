@@ -1,88 +1,145 @@
-# Twitter Trending Topics/Hashtags Scraper
+# Twitter Trending Hashtags Scraper
 
-This Python script scrapes the trending topics from the website trends24.in and generates hashtags from the trends. It supports filtering for English-only trends and ensures that the generated hashtags fit within Twitter's character limits.
+A Python-based web scraper that extracts trending hashtags from trends24.in (India) and stores them in Supabase with sentiment analysis and engagement scoring.
+
+## Features
+
+- Scrapes trending hashtags from trends24.in for India
+- Calculates engagement scores (1-10 scale) for each hashtag
+- Performs sentiment analysis (Positive/Negative/Neutral)
+- Generates Twitter and Instagram search links
+- Stores data in Supabase database
+- Fresh data insertion (clears old data before inserting new)
+- Filters for Indian-relevant content
 
 ## Requirements
 
-- Python 3.x
-- Selenium
-- BeautifulSoup
-- WebDriver Manager
-- Regular expressions (for filtering)
+- Python 3.7+
+- Supabase account and project
+- Internet connection for web scraping
 
-You can install the required packages using pip:
+## Installation
+
+1. Clone this repository:
 ```bash
-pip install selenium beautifulsoup4 webdriver-manager
+git clone https://github.com/Aditya0611/jjungles-trend-engine.git
+cd jjungles-trend-engine
+```
+
+2. Install required packages:
+```bash
+pip install -r requirements.txt
+```
+
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
+Edit `.env` file and add your Supabase credentials:
+```
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_KEY=your_supabase_anon_key
+```
+
+## Supabase Setup
+
+Create a table named `Twitter trending_Hashtags` in your Supabase project with the following columns:
+
+```sql
+CREATE TABLE "Twitter trending_Hashtags" (
+    id SERIAL PRIMARY KEY,
+    topic TEXT NOT NULL,
+    count TEXT,
+    engagement_score INTEGER,
+    sentiment TEXT,
+    twitter_link TEXT,
+    post_content TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
 ```
 
 ## Usage
 
-1. Run the script:
-
+Run the scraper:
 ```bash
 python t3_scraper.py
 ```
 
-2. The script will:
-
-- Open the trends24.in website.
-- Accept the cookie consent (if prompted).
-- Navigate to the "Table" section to gather trending topics.
-- Extract the trending topics along with additional information such as rank, position, count, and duration.
-- Optionally filter only English topics (if `ENGLISH_ONLY_REGEX` is set to `True`).
-- Create and print hashtags based on the most popular trends while adhering to Twitter's 280-character limit.
+The script will:
+1. Connect to Supabase using your credentials
+2. Scrape trending topics from trends24.in
+3. Calculate engagement scores and sentiment for each hashtag
+4. Clear existing data and insert fresh trending topics
+5. Display results in the terminal
 
 ## Configuration
 
-- `HEADLESS_MODE`: Set to `True` to run in headless mode (without opening a browser window).
-- `ENGLISH_ONLY_REGEX`: Set to `True` to filter for English-only trends based on regex patterns.
-- `TWEET_MAX_CHARS`: The character limit for hashtags (default is 280).
+Edit `config.txt` to customize scraper behavior:
 
-## Creating a Standalone Executable
-
-To create a standalone executable from the Python script using PyInstaller:
-
-1. Install PyInstaller:
-
-```bash
-pip install pyinstaller
+```json
+{
+    "TWEET_MAX_CHARS": 280,
+    "HEADLESS_MODE": false,
+    "ENGLISH_ONLY_REGEX": false,
+    "SLEEP_TIME_PAGE_LOAD": 5,
+    "SLEEP_TIME_AFTER_COOKIE_CONSENT": 2,
+    "SLEEP_TIME_AFTER_TAB_CLICK": 3
+}
 ```
 
-2. Navigate to the directory containing your script and run the following command:
+## Project Structure
 
-```bash
-pyinstaller --onefile t3_scraper.py
+```
+├── t3_scraper.py          # Main scraper script
+├── config_manager.py      # Configuration management
+├── config.txt            # Configuration settings
+├── requirements.txt      # Python dependencies
+├── .env.example         # Environment variables template
+├── .gitignore          # Git ignore patterns
+└── README.md           # Project documentation
 ```
 
-This will generate a standalone executable in the `dist` directory. You can run this executable without needing to install Python or any dependencies on the target machine.
+## Functions Overview
 
-## Executing the Script
+- `get_trending_topics()` - Scrapes trends from trends24.in
+- `analyze_hashtag_sentiment()` - Performs sentiment analysis using TextBlob
+- `calculate_engagement_score()` - Calculates engagement scores (1-10)
+- `insert_fresh_data_only()` - Clears old data and inserts fresh trends
+- `is_indian_text()` - Filters for India-relevant content
 
-On Linux, ensure that the generated executable is set as executable by running:
+## Data Schema
 
-```bash
-chmod +x dist/t3_scraper dist/run_scraper.sh
-```
+Each trending hashtag includes:
+- **topic**: The hashtag text (e.g., "#TrendingNow")
+- **count**: Tweet count if available (e.g., "25K")
+- **engagement_score**: Calculated score from 1-10
+- **sentiment**: Positive/Negative/Neutral
+- **twitter_link**: Direct Twitter search URL
+- **post_content**: Sample post content for the hashtag
 
-**Running the Script**
+## Error Handling
 
-You can run the script in two ways:
+The scraper includes robust error handling for:
+- Network connectivity issues
+- Supabase connection problems
+- Website structure changes
+- Missing environment variables
 
-Option 1: Right-click the `run_scraper.sh` file and select "Run as a Program" to execute it.
+## Contributing
 
-Option 2: Using the Terminal
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-- Open a terminal window.
-- Navigate to the directory where the `run_scraper.sh` file is located.
-- Run the following command:
+## License
 
-```bash
-./run_scraper.sh
-```
-
-This will execute the scraper by launching the executable.
+This project is open source and available under the MIT License.
 
 ## Notes
 
-- Ensure you have the Chrome WebDriver installed. You can use the WebDriver Manager to automatically handle this.
-- Adjust the sleep times if necessary based on your internet speed or website load time.
+- The scraper respects website rate limits and includes appropriate delays
+- Trending topics are filtered for Indian relevance
+- Data is refreshed completely on each run for accuracy
+- Ensure your Supabase RLS policies allow insertions if enabled
